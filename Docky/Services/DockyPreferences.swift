@@ -1716,6 +1716,16 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
         }
     }
 
+    /// Whether app tiles fade to half opacity while their app is idle —
+    /// hidden (Cmd+H) or running with no windows open. Off keeps icons
+    /// fully opaque regardless of state.
+    var dimsIdleAppIcons: Bool {
+        didSet {
+            guard dimsIdleAppIcons != oldValue else { return }
+            defaults.set(dimsIdleAppIcons, forKey: Keys.dimsIdleAppIcons)
+        }
+    }
+
     /// Whether `docky://install-widget` links may install a widget. Off by
     /// default so a web page can't drive a native-code install unprompted.
     var allowsWidgetLinkInstalls: Bool {
@@ -3557,6 +3567,7 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
         static let windowSpaceBehavior = "docky.windowSpaceBehavior"
         static let autohidesWindow = "docky.autohidesWindow"
         static let showsAppBadges = "docky.showsAppBadges"
+        static let dimsIdleAppIcons = "docky.dimsIdleAppIcons"
         static let allowsWidgetLinkInstalls = "docky.allowsWidgetLinkInstalls"
         static let folderBadgeMode = "docky.folderBadgeMode"
         static let folderBadgePreviewStyle = "docky.folderBadgePreviewStyle"
@@ -3667,6 +3678,7 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
         static let windowSpaceBehavior: DockWindowSpaceBehavior = .allSpaces
         static let autohidesWindow = false
         static let showsAppBadges = true
+        static let dimsIdleAppIcons = false
         static let allowsWidgetLinkInstalls = false
         static let folderBadgeMode: FolderBadgeMode = .combined
         static let folderBadgePreviewStyle: FolderBadgePreviewStyle = .dot
@@ -3800,6 +3812,7 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
         let storedWindowSpaceBehavior = defaults.string(forKey: Keys.windowSpaceBehavior)
         let storedAutohidesWindow = defaults.object(forKey: Keys.autohidesWindow) as? Bool
         let storedShowsAppBadges = defaults.object(forKey: Keys.showsAppBadges) as? Bool
+        let storedDimsIdleAppIcons = defaults.object(forKey: Keys.dimsIdleAppIcons) as? Bool
         let storedAllowsWidgetLinkInstalls = defaults.object(forKey: Keys.allowsWidgetLinkInstalls) as? Bool
         let storedFolderBadgeMode = defaults.string(forKey: Keys.folderBadgeMode)
         let storedFolderBadgePreviewStyle = defaults.string(forKey: Keys.folderBadgePreviewStyle)
@@ -3927,6 +3940,7 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
         self.windowSpaceBehavior = (storedWindowSpaceBehavior.flatMap(DockWindowSpaceBehavior.init(rawValue:)) ?? DefaultValues.windowSpaceBehavior)
         self.autohidesWindow = storedAutohidesWindow ?? DefaultValues.autohidesWindow
         self.showsAppBadges = storedShowsAppBadges ?? DefaultValues.showsAppBadges
+        self.dimsIdleAppIcons = storedDimsIdleAppIcons ?? DefaultValues.dimsIdleAppIcons
         self.allowsWidgetLinkInstalls = storedAllowsWidgetLinkInstalls ?? DefaultValues.allowsWidgetLinkInstalls
         self.folderBadgeMode = storedFolderBadgeMode
             .flatMap(FolderBadgeMode.init(rawValue:))
@@ -4201,6 +4215,7 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
         // Visibility
         autohidesWindow = DefaultValues.autohidesWindow
         showsAppBadges = DefaultValues.showsAppBadges
+        dimsIdleAppIcons = DefaultValues.dimsIdleAppIcons
         folderBadgeMode = DefaultValues.folderBadgeMode
         folderBadgePreviewStyle = DefaultValues.folderBadgePreviewStyle
         autohideWindowDelay = DefaultValues.autohideWindowDelay
@@ -4260,6 +4275,7 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
         windowSpaceBehavior = DefaultValues.windowSpaceBehavior
         autohidesWindow = DefaultValues.autohidesWindow
         showsAppBadges = DefaultValues.showsAppBadges
+        dimsIdleAppIcons = DefaultValues.dimsIdleAppIcons
         folderBadgeMode = DefaultValues.folderBadgeMode
         folderBadgePreviewStyle = DefaultValues.folderBadgePreviewStyle
         opensAtLogin = DefaultValues.opensAtLogin
